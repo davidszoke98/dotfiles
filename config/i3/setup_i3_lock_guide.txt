@@ -1,0 +1,17 @@
+You need the file /etc/systemd/system/suspend@.service and you have to modify to execute the commands you want it to (e.g. i3lock) like this:
+
+[Unit]
+Description=User suspend actions
+Before=sleep.target
+
+[Service]
+User=%I
+Type=forking
+Environment=DISPLAY=:0
+ExecStart=/usr/bin/i3lock -ef -c ffffff
+ExecStartPost=/usr/bin/sleep 1
+
+[Install]
+WantedBy=sleep.target
+
+And then enable it with sudo systemctl enable suspend@user.service (with your username instead of user). You shouldn't have to reboot for this to work btw. If you want to turn it off you can do so with sudo systemctl disable suspend@user.service.
